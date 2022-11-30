@@ -16,6 +16,7 @@
     },
     "require-dev": {
         "doctrine/coding-standard": "^10.0",
+        "phpunit/phpunit": "^9",
         "roave/security-advisories": "dev-latest",
         "symfony/maker-bundle": "^1.48"
     },
