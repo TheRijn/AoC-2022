@@ -14,7 +14,7 @@ use function sprintf;
 
 abstract class BaseTest extends KernelTestCase
 {
-    protected const DAY = 0;
+    protected const DAY = self::DAY;
     protected CommandTester $commandTester;
 
     protected function setUp(): void
@@ -22,10 +22,10 @@ abstract class BaseTest extends KernelTestCase
         $kernel      = self::bootKernel();
         $application = new Application($kernel);
 
-        $command             = $application->find(sprintf('aoc:%d', self::DAY));
+        $command             = $application->find(sprintf('aoc:%d', static::DAY));
         $this->commandTester = new CommandTester($command);
 
-        $fileContent = file_get_contents(sprintf('input/%d.example.input', self::DAY));
+        $fileContent = file_get_contents(sprintf('input/%d.example.input', static::DAY));
         $this->commandTester->setInputs(explode("\n", $fileContent));
     }
 
@@ -34,7 +34,7 @@ abstract class BaseTest extends KernelTestCase
         $this->commandTester->execute(['--one' => true]);
         $this->commandTester->assertCommandIsSuccessful();
 
-        $expected = file_get_contents(sprintf('input/%d.one.output', self::DAY));
+        $expected = file_get_contents(sprintf('input/%d.one.output', static::DAY));
 
         $this->assertEquals($expected, $this->commandTester->getDisplay());
     }
@@ -44,7 +44,7 @@ abstract class BaseTest extends KernelTestCase
         $this->commandTester->execute(['--two' => true]);
         $this->commandTester->assertCommandIsSuccessful();
 
-        $expected = file_get_contents(sprintf('input/%d.two.output', self::DAY));
+        $expected = file_get_contents(sprintf('input/%d.two.output', static::DAY));
 
         $this->assertEquals($expected, $this->commandTester->getDisplay());
     }
