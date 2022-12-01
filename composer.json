@@ -11,14 +11,13 @@
         "ext-iconv": "*",
         "symfony/console": "6.1.*",
         "symfony/flex": "^2",
+        "symfony/framework-bundle": "6.1.*",
         "symfony/runtime": "6.1.*",
         "symfony/yaml": "6.1.*"
     },
     "require-dev": {
         "doctrine/coding-standard": "^10.0",
-        "phpunit/phpunit": "^9",
-        "roave/security-advisories": "dev-latest",
-        "symfony/maker-bundle": "^1.48"
+        "phpunit/phpunit": "^9"
     },
     "config": {
         "allow-plugins": {
