@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests;
+namespace App\Tests\Unit;
 
-class TestDay1 extends BaseTest
+class Day1Test extends AocBase
 {
     protected const DAY = 1;
 }

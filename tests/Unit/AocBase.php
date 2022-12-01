@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests;
+namespace App\Tests\Unit;
 
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -12,9 +12,9 @@ use function explode;
 use function file_get_contents;
 use function sprintf;
 
-abstract class BaseTest extends KernelTestCase
+abstract class AocBase extends KernelTestCase
 {
-    protected const DAY = self::DAY;
+    protected const DAY = null;
     protected CommandTester $commandTester;
 
     protected function setUp(): void
@@ -25,7 +25,7 @@ abstract class BaseTest extends KernelTestCase
         $command             = $application->find(sprintf('aoc:%d', static::DAY));
         $this->commandTester = new CommandTester($command);
 
-        $fileContent = file_get_contents(sprintf('input/%d.example.input', static::DAY));
+        $fileContent = file_get_contents(sprintf('input/%d/example.input', static::DAY));
         $this->commandTester->setInputs(explode("\n", $fileContent));
     }
 
@@ -34,7 +34,7 @@ abstract class BaseTest extends KernelTestCase
         $this->commandTester->execute(['--one' => true]);
         $this->commandTester->assertCommandIsSuccessful();
 
-        $expected = file_get_contents(sprintf('input/%d.one.output', static::DAY));
+        $expected = file_get_contents(sprintf('input/%d/one.output', static::DAY));
 
         $this->assertEquals($expected, $this->commandTester->getDisplay());
     }
@@ -44,7 +44,7 @@ abstract class BaseTest extends KernelTestCase
         $this->commandTester->execute(['--two' => true]);
         $this->commandTester->assertCommandIsSuccessful();
 
-        $expected = file_get_contents(sprintf('input/%d.two.output', static::DAY));
+        $expected = file_get_contents(sprintf('input/%d/two.output', static::DAY));
 
         $this->assertEquals($expected, $this->commandTester->getDisplay());
     }
