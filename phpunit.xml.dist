@@ -18,6 +18,7 @@
         <env name="APP_ENV" value="dev"/>
         <env name="APP_SECRET" value="e86cf3cd800871f904cb9472f49a744d"/>
         <!-- ###- symfony/framework-bundle ### -->
+        <env name="KERNEL_CLASS" value="App\Kernel" />
     </php>
 
     <testsuites>

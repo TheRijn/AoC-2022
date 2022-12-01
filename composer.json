@@ -17,7 +17,8 @@
     },
     "require-dev": {
         "doctrine/coding-standard": "^10.0",
-        "phpunit/phpunit": "^9"
+        "phpunit/phpunit": "^9",
+        "symfony/phpunit-bridge": "6.1.*"
     },
     "config": {
         "allow-plugins": {

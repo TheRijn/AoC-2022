@@ -7,6 +7,10 @@ namespace App\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use function array_sum;
+use function rsort;
+use function sprintf;
+
 #[AsCommand(name: 'aoc:1')]
 class DayOne extends AocCommand
 {
@@ -15,27 +19,29 @@ class DayOne extends AocCommand
     {
         $elves = [];
 
-        $curr_elf = [];
+        $currElf = [];
 
         foreach ($input as $line) {
-            if ($line === "") {
-                $elves[] = $curr_elf;
-                $curr_elf = [];
+            if ($line === '') {
+                $elves[] = $currElf;
+                $currElf = [];
                 continue;
             }
 
-            $curr_elf[] = (int) $line;
+            $currElf[] = (int) $line;
         }
-        $elves[] = $curr_elf;
+
+        $elves[] = $currElf;
 
         $biggest = 0;
 
-
         foreach ($elves as $elf) {
             $sum = array_sum($elf);
-            if ($sum > $biggest) {
-                $biggest = $sum;
+            if ($sum <= $biggest) {
+                continue;
             }
+
+            $biggest = $sum;
         }
 
         $output->writeln(sprintf('%d', $biggest));
@@ -46,18 +52,19 @@ class DayOne extends AocCommand
     {
         $elves = [];
 
-        $curr_elf = [];
+        $currElf = [];
 
         foreach ($input as $line) {
-            if ($line === "") {
-                $elves[] = $curr_elf;
-                $curr_elf = [];
+            if ($line === '') {
+                $elves[] = $currElf;
+                $currElf = [];
                 continue;
             }
 
-            $curr_elf[] = (int) $line;
+            $currElf[] = (int) $line;
         }
-        $elves[] = $curr_elf;
+
+        $elves[] = $currElf;
 
         $sums = [];
 

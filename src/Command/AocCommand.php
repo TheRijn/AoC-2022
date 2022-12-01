@@ -27,7 +27,6 @@ abstract class AocCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $textInput = $this->getInputFromStdIn($input);
-
         if ($input->getOption('one')) {
             $this->partOne($textInput, $output);
         }
@@ -44,6 +43,9 @@ abstract class AocCommand extends Command
         return Command::SUCCESS;
     }
 
+    /**
+     * https://github.com/symfony/symfony/issues/37835
+     */
     private function getInputFromStdIn(InputInterface $input): array|false
     {
         $inputStream   = $input instanceof StreamableInputInterface ? $input->getStream() : null;
