@@ -7,15 +7,17 @@ namespace App\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use function sprintf;
+
 #[AsCommand(name: 'aoc:2')]
 class DayTwo extends AocCommand
 {
-    private const ROCK = 1; // rock
-    private const PAPER = 2; // paper
-    private const SCISSORS = 3; // scissors
+    private const ROCK     = 1;
+    private const PAPER    = 2;
+    private const SCISSORS = 3;
 
-    private const TIE   = 3;
-    private const WIN   = 6;
+    private const TIE = 3;
+    private const WIN = 6;
 
     /** @param string[] $input */
     protected function partOne(array $input, OutputInterface $output): void
@@ -23,7 +25,7 @@ class DayTwo extends AocCommand
         $total = 0;
 
         foreach ($input as $line) {
-            if ($line === "") {
+            if ($line === '') {
                 continue;
             }
 
@@ -39,18 +41,22 @@ class DayTwo extends AocCommand
 
             $other = $line[0];
 
-            if (($me === 'Y' && $other === 'A') ||
+            if (
+                ($me === 'Y' && $other === 'A') ||
                 ($me === 'Z' && $other === 'B') ||
                 ($me === 'X' && $other === 'C')
             ) {
                 $total += self::WIN;
-            } elseif (($me === 'X' && $other === 'A') ||
+            } elseif (
+                ($me === 'X' && $other === 'A') ||
                 ($me === 'Y' && $other === 'B') ||
-                ($me === 'Z' && $other === 'C')) {
+                ($me === 'Z' && $other === 'C')
+            ) {
                 $total += self::TIE;
             }
         }
-        $output->writeln(sprintf("%d", $total));
+
+        $output->writeln(sprintf('%d', $total));
     }
 
     /** @param string[] $input */
@@ -59,13 +65,13 @@ class DayTwo extends AocCommand
         $total = 0;
 
         foreach ($input as $line) {
-            if ($line === "") {
+            if ($line === '') {
                 continue;
             }
 
             $shouldWin = $line[2];
-            $other = $line[0];
-            if ($shouldWin === 'X') {// lose
+            $other     = $line[0];
+            if ($shouldWin === 'X') { // Lose
                 if ($other === 'A') {
                     $total += self::SCISSORS;
                 } elseif ($other === 'B') {
@@ -73,7 +79,7 @@ class DayTwo extends AocCommand
                 } elseif ($other === 'C') {
                     $total += self::PAPER;
                 }
-            } elseif ($shouldWin === 'Y') { // tie
+            } elseif ($shouldWin === 'Y') { // Tie
                 $total += self::TIE;
                 if ($other === 'A') {
                     $total += self::ROCK;
@@ -82,7 +88,7 @@ class DayTwo extends AocCommand
                 } elseif ($other === 'C') {
                     $total += self::SCISSORS;
                 }
-            } else { // Win (Z)
+            } elseif ($shouldWin === 'Z') { // Win
                 $total += self::WIN;
                 if ($other === 'A') {
                     $total += self::PAPER;
@@ -92,8 +98,8 @@ class DayTwo extends AocCommand
                     $total += self::ROCK;
                 }
             }
-
         }
+
         $output->writeln(sprintf('%d', $total));
     }
 }
