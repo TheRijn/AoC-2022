@@ -12,7 +12,7 @@ use function rsort;
 use function sprintf;
 
 #[AsCommand(name: 'aoc:1')]
-class DayOne extends AocCommand
+class Day1 extends AocCommand
 {
     /** @param string[] $input */
     protected function partOne(array $input, OutputInterface $output): void

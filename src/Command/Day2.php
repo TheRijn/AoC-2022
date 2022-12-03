@@ -10,7 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function sprintf;
 
 #[AsCommand(name: 'aoc:2')]
-class DayTwo extends AocCommand
+class Day2 extends AocCommand
 {
     private const ROCK     = 1;
     private const PAPER    = 2;

@@ -19,7 +19,7 @@ use function sprintf;
 use function str_split;
 
 #[AsCommand(name: 'aoc:3')]
-class DayThree extends AocCommand
+class Day3 extends AocCommand
 {
     private function getPriorityForChar(string $char): int
     {
