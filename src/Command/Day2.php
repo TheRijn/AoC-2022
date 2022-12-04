@@ -25,10 +25,6 @@ class Day2 extends AocCommand
         $total = 0;
 
         foreach ($input as $line) {
-            if ($line === '') {
-                continue;
-            }
-
             $me = $line[2];
 
             if ($me === 'X') {
@@ -65,12 +61,9 @@ class Day2 extends AocCommand
         $total = 0;
 
         foreach ($input as $line) {
-            if ($line === '') {
-                continue;
-            }
-
             $shouldWin = $line[2];
             $other     = $line[0];
+
             if ($shouldWin === 'X') { // Lose
                 if ($other === 'A') {
                     $total += self::SCISSORS;

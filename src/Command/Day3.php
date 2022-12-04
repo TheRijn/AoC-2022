@@ -36,10 +36,6 @@ class Day3 extends AocCommand
         $sum = 0;
 
         foreach ($input as $rucksack) {
-            if ($rucksack === '') {
-                continue;
-            }
-
             $all        = str_split($rucksack);
             $partLength = intdiv(count($all), 2);
 

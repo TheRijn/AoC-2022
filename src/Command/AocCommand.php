@@ -51,7 +51,7 @@ abstract class AocCommand extends Command
         $inputStream   = $input instanceof StreamableInputInterface ? $input->getStream() : null;
         $inputStream ??= STDIN;
 
-        return explode("\n", stream_get_contents($inputStream));
+        return explode("\n", rtrim(stream_get_contents($inputStream)));
     }
 
     /** @param string[] $input */

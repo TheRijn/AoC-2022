@@ -8,7 +8,6 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
-use function explode;
 use function file_get_contents;
 use function sprintf;
 
@@ -26,7 +25,7 @@ abstract class AocBase extends KernelTestCase
         $this->commandTester = new CommandTester($command);
 
         $fileContent = file_get_contents(sprintf('input/%d/example.input', static::DAY));
-        $this->commandTester->setInputs(explode("\n", $fileContent));
+        $this->commandTester->setInputs([$fileContent]);
     }
 
     public function testPartOne(): void
