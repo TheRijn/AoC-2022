@@ -27,7 +27,7 @@ class Day4 extends AocCommand
             }
         }
 
-        $output->writeln(sprintf('%d', $count));
+        $output->writeln((string) ($count));
     }
 
     /** @param string[] $input */
@@ -44,6 +44,6 @@ class Day4 extends AocCommand
             }
         }
 
-        $output->writeln(sprintf('%d', $count));
+        $output->writeln((string) ($count));
     }
 }

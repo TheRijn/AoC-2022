@@ -52,7 +52,7 @@ class Day2 extends AocCommand
             }
         }
 
-        $output->writeln(sprintf('%d', $total));
+        $output->writeln((string) ($total));
     }
 
     /** @param string[] $input */
@@ -93,6 +93,6 @@ class Day2 extends AocCommand
             }
         }
 
-        $output->writeln(sprintf('%d', $total));
+        $output->writeln((string) ($total));
     }
 }

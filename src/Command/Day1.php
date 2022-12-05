@@ -30,7 +30,7 @@ class Day1 extends AocCommand
             $biggest = $sum;
         }
 
-        $output->writeln(sprintf('%d', $biggest));
+        $output->writeln((string) ($biggest));
     }
 
     /** @param string[] $input */

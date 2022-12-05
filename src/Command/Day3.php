@@ -47,7 +47,7 @@ class Day3 extends AocCommand
             $sum += $this->getPriorityForChar($both);
         }
 
-        $output->writeln(sprintf('%d', $sum));
+        $output->writeln((string) ($sum));
     }
 
     /** @param string[] $input */
@@ -67,6 +67,6 @@ class Day3 extends AocCommand
             $start += 3;
         }
 
-        $output->writeln(sprintf('%d', $sum));
+        $output->writeln((string) ($sum));
     }
 }
