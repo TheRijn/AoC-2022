@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use Ds\Stack;
+use Ds\Vector;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use function array_key_exists;
-use function array_pop;
-use function array_reverse;
-use function array_slice;
 use function preg_match;
 use function preg_match_all;
 use function str_split;
@@ -21,18 +19,22 @@ class Day5 extends AocCommand
     private const RE1 = '/((?P<letter>\[[A-Z]\]|   )(?> |$))+/U';
     private const RE2 = '/move (?P<amount>\d+) from (?P<from>\d+) to (?P<to>\d+)/';
 
-    private const STACKS = 3; //3 for example 8 for realsies
+    private int $stackLines = 3;
 
     /**
      * @param string[] $input
      *
-     * @return array<string[]>
+     * @return Vector<Stack<string>>
      */
-    private function readStacks(array $input): array
+    private function readStacks(Vector $input): Vector
     {
-        $stacks = [];
+        if ($input->count() > 10) {
+            $this->stackLines = 8;
+        }
 
-        foreach (array_reverse(array_slice($input, 0, self::STACKS)) as $line) {
+        $stacks = new Vector();
+
+        foreach ($input->slice(0, $this->stackLines)->reversed() as $line) {
             preg_match_all(self::RE1, $line, $matches);
             $letters = $matches['letter'];
 
@@ -41,8 +43,8 @@ class Day5 extends AocCommand
                     continue;
                 }
 
-                if (! array_key_exists($key, $stacks)) {
-                    $stacks[] = [];
+                if ($stacks->count() <= $key) {
+                    $stacks[] = new Stack();
                 }
 
                 $stacks[$key][] = str_split($value)[1];
@@ -55,9 +57,10 @@ class Day5 extends AocCommand
     /** @param string[] $input */
     protected function partOne(array $input, OutputInterface $output): void
     {
-        $stacks = $this->readStacks($input);
+        $inputVector = new Vector($input);
+        $stacks      = $this->readStacks($inputVector);
 
-        foreach (array_slice($input, self::STACKS + 2) as $line) {
+        foreach ($inputVector->slice($this->stackLines + 2) as $line) {
             preg_match(self::RE2, $line, $matches);
 
             $amount = (int) $matches['amount'];
@@ -65,12 +68,13 @@ class Day5 extends AocCommand
             $to     = (int) $matches['to'] - 1;
 
             for ($i = 0; $i < $amount; $i++) {
-                $stacks[$to][] = array_pop($stacks[$from]);
+                $stacks[$to][] = $stacks[$from]->pop();
             }
         }
 
+        /** @var Stack<string> $stack */
         foreach ($stacks as $stack) {
-            $output->write(array_pop($stack));
+            $output->write($stack->peek());
         }
 
         $output->writeln('');
@@ -79,28 +83,30 @@ class Day5 extends AocCommand
     /** @param string[] $input */
     protected function partTwo(array $input, OutputInterface $output): void
     {
-        $stacks = $this->readStacks($input);
+        $inputVector = new Vector($input);
+        $stacks      = $this->readStacks($inputVector);
 
-        foreach (array_slice($input, self::STACKS + 2) as $line) {
+        foreach ($inputVector->slice($this->stackLines + 2) as $line) {
             preg_match(self::RE2, $line, $matches);
 
             $amount = (int) $matches['amount'];
             $from   = (int) $matches['from'] - 1;
             $to     = (int) $matches['to'] - 1;
 
-            $temp = [];
+            $temp = new Stack();
 
             for ($i = 0; $i < $amount; $i++) {
-                $temp[] = array_pop($stacks[$from]);
+                $temp[] = $stacks[$from]->pop();
             }
 
             for ($i = 0; $i < $amount; $i++) {
-                $stacks[$to][] = array_pop($temp);
+                $stacks[$to][] = $temp->pop();
             }
         }
 
+        /** @var Stack<string> $stack */
         foreach ($stacks as $stack) {
-            $output->write(array_pop($stack));
+            $output->write($stack->peek());
         }
 
         $output->writeln('');
