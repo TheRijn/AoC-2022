@@ -4,24 +4,20 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use Ds\Set;
+use Ds\Vector;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use function array_intersect;
-use function array_map;
-use function array_slice;
-use function array_values;
-use function count;
 use function ctype_lower;
 use function intdiv;
 use function ord;
-use function sprintf;
 use function str_split;
 
 #[AsCommand(name: 'aoc:3')]
 class Day3 extends AocCommand
 {
-    private function getPriorityForChar(string $char): int
+    private static function getPriorityForChar(string $char): int
     {
         if (ctype_lower($char)) {
             return ord($char) - 96; // 'a' - 1
@@ -36,15 +32,15 @@ class Day3 extends AocCommand
         $sum = 0;
 
         foreach ($input as $rucksack) {
-            $all        = str_split($rucksack);
-            $partLength = intdiv(count($all), 2);
+            $all        = new Vector(str_split($rucksack));
+            $partLength = intdiv($all->count(), 2);
 
-            $part1 = array_slice($all, 0, $partLength);
-            $part2 = array_slice($all, $partLength, $partLength);
+            $part1 = new Set($all->slice(0, $partLength));
+            $part2 = new Set($all->slice($partLength, $partLength));
 
-            $both = array_values(array_intersect($part1, $part2))[0];
+            $both = $part1->intersect($part2)[0];
 
-            $sum += $this->getPriorityForChar($both);
+            $sum += self::getPriorityForChar($both);
         }
 
         $output->writeln((string) ($sum));
@@ -53,16 +49,18 @@ class Day3 extends AocCommand
     /** @param string[] $input */
     protected function partTwo(array $input, OutputInterface $output): void
     {
-        $count = count($input);
-        $start = 0;
+        $inputVector = new Vector($input);
+        $count       = $inputVector->count();
+        $start       = 0;
 
         $sum = 0;
 
         while ($start < $count - 2) {
-            $rucksacks = array_map('str_split', array_slice($input, $start, 3));
-            $badge     = array_values(array_intersect(...$rucksacks))[0];
+            /** @var Vector<Set<string>> $rucksacks */
+            $rucksacks = $inputVector->slice($start, 3)->map('str_split')->map(static fn ($x) => new Set($x));
+            $badge     = $rucksacks[0]->intersect($rucksacks[1])->intersect($rucksacks[2])[0];
 
-            $sum += $this->getPriorityForChar($badge);
+            $sum += self::getPriorityForChar($badge);
 
             $start += 3;
         }
