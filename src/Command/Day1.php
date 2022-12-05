@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use Ds\Vector;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
-
-use function array_sum;
-use function rsort;
-use function sprintf;
 
 #[AsCommand(name: 'aoc:1')]
 class Day1 extends AocCommand
@@ -17,52 +14,34 @@ class Day1 extends AocCommand
     /** @param string[] $input */
     protected function partOne(array $input, OutputInterface $output): void
     {
-        $elves = $this->loadElves($input);
+        $elves = $this->loadElfSums($input);
 
-        $biggest = 0;
-
-        foreach ($elves as $elf) {
-            $sum = array_sum($elf);
-            if ($sum <= $biggest) {
-                continue;
-            }
-
-            $biggest = $sum;
-        }
-
-        $output->writeln((string) ($biggest));
+        $output->writeln((string) $elves->sorted()->last());
     }
 
     /** @param string[] $input */
     protected function partTwo(array $input, OutputInterface $output): void
     {
-        $elves = $this->loadElves($input);
+        $sums = $this->loadElfSums($input);
 
-        $sums = [];
-
-        foreach ($elves as $elf) {
-            $sums[] = array_sum($elf);
-        }
-
-        rsort($sums);
-
-        $output->writeln(sprintf('%d', $sums[0] + $sums[1] + $sums[2]));
+        $output->writeln((string) $sums->sorted()->slice(-3, 3)->sum());
     }
 
     /**
      * @param string[] $input
-     * @return array<int[]>
+     *
+     * @return Vector<int>
      */
-    protected function loadElves(array $input) : array
+    protected function loadElfSums(array $input): Vector
     {
-        $elves = [];
+        $elves = new Vector();
 
-        $currElf = [];
+        $currElf = new Vector();
 
         foreach ($input as $line) {
             if ($line === '') {
                 $elves[] = $currElf;
-                $currElf = [];
+                $currElf = new Vector();
                 continue;
             }
 
@@ -70,6 +49,7 @@ class Day1 extends AocCommand
         }
 
         $elves[] = $currElf;
-        return $elves;
+
+        return $elves->map(static fn ($x) => $x->sum());
     }
 }
