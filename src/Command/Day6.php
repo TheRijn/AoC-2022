@@ -17,9 +17,9 @@ class Day6 extends AocCommand
 {
     private static function findUniquePart(Vector $string, int $length): int
     {
-        for ($i = $length - 1; $length < $string->count(); $i++) {
-            if ((new Set($string->slice($i - $length + 1, $length)))->count() === $length) {
-                return $i + 1;
+        for ($i = $length; $length <= $string->count(); $i++) {
+            if ((new Set($string->slice($i - $length, $length)))->count() === $length) {
+                return $i;
             }
         }
 
