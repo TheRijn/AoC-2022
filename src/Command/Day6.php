@@ -26,16 +26,16 @@ class Day6 extends AocCommand
         throw new InvalidArgumentException();
     }
 
-    /** @param string[] $input */
-    protected function partOne(array $input, OutputInterface $output): void
+    /** @param Vector $input */
+    protected function partOne(Vector $input, OutputInterface $output): void
     {
         $inputChars = new Vector(str_split($input[0]));
 
         $output->writeln((string) self::findUniquePart($inputChars, 4));
     }
 
-    /** @param string[] $input */
-    protected function partTwo(array $input, OutputInterface $output): void
+    /** @param Vector $input */
+    protected function partTwo(Vector $input, OutputInterface $output): void
     {
         $inputChars = new Vector(str_split($input[0]));
 

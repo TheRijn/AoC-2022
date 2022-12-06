@@ -11,16 +11,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'aoc:1')]
 class Day1 extends AocCommand
 {
-    /** @param string[] $input */
-    protected function partOne(array $input, OutputInterface $output): void
+    /** @param Vector $input */
+    protected function partOne(Vector $input, OutputInterface $output): void
     {
         $elves = $this->loadElfSums($input);
 
         $output->writeln((string) $elves->sorted()->last());
     }
 
-    /** @param string[] $input */
-    protected function partTwo(array $input, OutputInterface $output): void
+    /** @param Vector $input */
+    protected function partTwo(Vector $input, OutputInterface $output): void
     {
         $sums = $this->loadElfSums($input);
 
@@ -32,7 +32,7 @@ class Day1 extends AocCommand
      *
      * @return Vector<int>
      */
-    protected function loadElfSums(array $input): Vector
+    protected function loadElfSums(Vector $input): Vector
     {
         $elves = new Vector();
 

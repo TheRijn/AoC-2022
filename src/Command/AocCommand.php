@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use Ds\Vector;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -46,17 +47,17 @@ abstract class AocCommand extends Command
     /**
      * https://github.com/symfony/symfony/issues/37835
      */
-    private function getInputFromStdIn(InputInterface $input): array|false
+    private function getInputFromStdIn(InputInterface $input): Vector
     {
         $inputStream   = $input instanceof StreamableInputInterface ? $input->getStream() : null;
         $inputStream ??= STDIN;
 
-        return explode("\n", rtrim(stream_get_contents($inputStream)));
+        return new Vector(explode("\n", rtrim(stream_get_contents($inputStream))));
     }
 
-    /** @param string[] $input */
-    abstract protected function partOne(array $input, OutputInterface $output): void;
+    /** @param Vector $input */
+    abstract protected function partOne(Vector $input, OutputInterface $output): void;
 
-    /** @param string[] $input */
-    abstract protected function partTwo(array $input, OutputInterface $output): void;
+    /** @param Vector $input */
+    abstract protected function partTwo(Vector $input, OutputInterface $output): void;
 }

@@ -26,6 +26,7 @@ abstract class AocBase extends KernelTestCase
 
         $fileContent = file_get_contents(sprintf('input/%d/example.input', static::DAY));
         $this->commandTester->setInputs([$fileContent]);
+        $this->assertNotNull(static::DAY);
     }
 
     public function testPartOne(): void

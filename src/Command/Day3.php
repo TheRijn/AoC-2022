@@ -26,8 +26,8 @@ class Day3 extends AocCommand
         return ord($char) - 38; // 'A' - 1 + 26
     }
 
-    /** @param string[] $input */
-    protected function partOne(array $input, OutputInterface $output): void
+    /** @param Vector $input */
+    protected function partOne(Vector $input, OutputInterface $output): void
     {
         $sum = 0;
 
@@ -46,18 +46,17 @@ class Day3 extends AocCommand
         $output->writeln((string) ($sum));
     }
 
-    /** @param string[] $input */
-    protected function partTwo(array $input, OutputInterface $output): void
+    /** @param Vector $input */
+    protected function partTwo(Vector $input, OutputInterface $output): void
     {
-        $inputVector = new Vector($input);
-        $count       = $inputVector->count();
+        $count       = $input->count();
         $start       = 0;
 
         $sum = 0;
 
         while ($start < $count - 2) {
             /** @var Vector<Set<string>> $rucksacks */
-            $rucksacks = $inputVector->slice($start, 3)->map('str_split')->map(static fn ($x) => new Set($x));
+            $rucksacks = $input->slice($start, 3)->map('str_split')->map(static fn ($x) => new Set($x));
             $badge     = $rucksacks[0]->intersect($rucksacks[1])->intersect($rucksacks[2])[0];
 
             $sum += self::getPriorityForChar($badge);

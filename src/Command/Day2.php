@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use Ds\Vector;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -19,8 +20,8 @@ class Day2 extends AocCommand
     private const TIE = 3;
     private const WIN = 6;
 
-    /** @param string[] $input */
-    protected function partOne(array $input, OutputInterface $output): void
+    /** @param Vector $input */
+    protected function partOne(Vector $input, OutputInterface $output): void
     {
         $total = 0;
 
@@ -55,8 +56,8 @@ class Day2 extends AocCommand
         $output->writeln((string) ($total));
     }
 
-    /** @param string[] $input */
-    protected function partTwo(array $input, OutputInterface $output): void
+    /** @param Vector $input */
+    protected function partTwo(Vector $input, OutputInterface $output): void
     {
         $total = 0;
 
