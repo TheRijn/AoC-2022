@@ -4,19 +4,41 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use Ds\Set;
+use Ds\Vector;
+use InvalidArgumentException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
+
+use function str_split;
 
 #[AsCommand(name: 'aoc:6')]
 class Day6 extends AocCommand
 {
+    private static function findUniquePart(Vector $string, int $length): int
+    {
+        for ($i = $length - 1; $length < $string->count(); $i++) {
+            if ((new Set($string->slice($i - $length + 1, $length)))->count() === $length) {
+                return $i + 1;
+            }
+        }
+
+        throw new InvalidArgumentException();
+    }
+
     /** @param string[] $input */
     protected function partOne(array $input, OutputInterface $output): void
     {
+        $inputChars = new Vector(str_split($input[0]));
+
+        $output->writeln((string) self::findUniquePart($inputChars, 4));
     }
 
     /** @param string[] $input */
     protected function partTwo(array $input, OutputInterface $output): void
     {
+        $inputChars = new Vector(str_split($input[0]));
+
+        $output->writeln((string) self::findUniquePart($inputChars, 14));
     }
 }
