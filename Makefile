@@ -22,3 +22,36 @@ d_install: ## Install dependencies in docker
 .PHONY: shell
 shell: ## Open an interactive shell
 	@docker compose run --rm app ash
+
+.PHONY: prep_day
+prep_day:
+	ifndef DAY
+	$(error DAY is not set)
+	endif
+	mkdir input/$(DAY)
+	touch input/$(DAY)/example.input input/$(DAY)/input input/$(DAY)/one.output input/$(DAY)/two.output
+	@echo "<?php\n\n\
+declare(strict_types=1);\n\n\
+namespace App\Command;\n\n\
+use Ds\Vector;\n\
+use Symfony\Component\Console\Attribute\AsCommand;\n\
+use Symfony\Component\Console\Output\OutputInterface;\n\n\
+#[AsCommand(name: 'aoc:$(DAY)')]\n\
+class Day$(DAY) extends AocCommand\n\
+{\n\
+    /** @param Vector \$$input */\n\
+    protected function partOne(Vector \$$input, OutputInterface \$$output): void\n\
+    {\n\
+    }\n\n\
+    /** @param Vector \$$input */\n\
+    protected function partTwo(Vector \$$input, OutputInterface \$$output): void\n\
+    {\n\
+    }\n\
+}" > src/Command/Day$(DAY).php
+	@echo "<?php\n\n\
+declare(strict_types=1);\n\
+namespace App\Tests\Unit;\n\n\
+class Day$(DAY)Test extends AocBase\n\
+{\n\
+   protected const DAY = $(DAY);\n\
+}" > tests/Unit/Day$(DAY)Test.php
