@@ -21,11 +21,11 @@ class Day7 extends AocCommand
         foreach ($input as $command) {
             if ($command === '$ cd /') {
                 $stack = [];
-                $current = $root;
+                $current = &$root;
 
             } elseif ($command === '$ cd ..') {
                 if (count($stack) === 0) {
-                    $current = $root;
+                    $current = &$root;
                     continue;
                 }
 
@@ -33,9 +33,8 @@ class Day7 extends AocCommand
 
             } elseif (str_starts_with($command, '$ cd')) {
                 preg_match('/\$ cd (?<name>[a-z]+)/', $command, $matches);
-                dump($current, $matches['name']);
-                $current = $current[$matches['name']];
-                $stack[] = $current;
+                $stack[] = &$current[$matches['name']];
+                $current = &$current[$matches['name']];
 
             } elseif (str_starts_with($command, 'dir')) {
                 preg_match('/dir (?<name>[a-z]+)/', $command, $matches);
@@ -58,7 +57,6 @@ class Day7 extends AocCommand
     protected function partOne(Vector $input, OutputInterface $output): void
     {
         $tree = self::readTree($input);
-        dump($tree);
     }
 
     /** @param Vector $input */
