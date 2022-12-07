@@ -23,40 +23,25 @@ for line in fileinput.input():
         case _:
             raise Exception
 
-MAX = 100000
+MAX = 100_000
 
 
-def get_size(object: int | dict, sum_list: list):
+def get_size(object: int | dict, list_of_all_sizes: list):
     if type(object) == dict:
-        sommetje = sum([get_size(x, sum_list) for x in object.values()])
-        if sommetje <= MAX:
-            sum_list.append(sommetje)
-        return sommetje
+        sum_thingy = sum(get_size(x, list_of_all_sizes) for x in object.values())
+        list_of_all_sizes.append(sum_thingy)
+        return sum_thingy
     return object
 
 
-sum_list = []
-root_size = get_size(root, sum_list)
+list_of_all_sizes = []
+root_size = get_size(root, list_of_all_sizes)
 
-print(sum(sum_list))
+print(sum(x for x in list_of_all_sizes if x <= MAX))
 
-TOTAL_NEEDED = 30000000
-DISK_SIZE = 70000000
+TOTAL_NEEDED = 30_000_000
+DISK_SIZE = 70_000_000
 
 still_needed = TOTAL_NEEDED - (DISK_SIZE - root_size)
 
-
-def get_size(object: int | dict, sum_list: list):
-    if type(object) == dict:
-        sommetje = sum([get_size(x, sum_list) for x in object.values()])
-        if sommetje >= still_needed:
-            sum_list.append(sommetje)
-        return sommetje
-    return object
-
-
-lijstje = []
-
-get_size(root, lijstje)
-
-print(min(lijstje))
+print(min(x for x in list_of_all_sizes if x >= still_needed))
