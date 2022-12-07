@@ -1,7 +1,9 @@
 import fileinput
 
-root = {}
-stack = []
+filesystem = dict[str, int | "filesystem"]
+
+root: filesystem = {}
+stack: list[filesystem] = []
 current = root
 
 for line in fileinput.input():
@@ -26,7 +28,7 @@ for line in fileinput.input():
 MAX = 100_000
 
 
-def get_size(object: int | dict, list_of_all_sizes: list):
+def get_size(object: int | filesystem, list_of_all_sizes: list[int]) -> int:
     if type(object) == dict:
         sum_thingy = sum(get_size(x, list_of_all_sizes) for x in object.values())
         list_of_all_sizes.append(sum_thingy)
@@ -34,7 +36,7 @@ def get_size(object: int | dict, list_of_all_sizes: list):
     return object
 
 
-list_of_all_sizes = []
+list_of_all_sizes: list[int] = []
 root_size = get_size(root, list_of_all_sizes)
 
 print(sum(x for x in list_of_all_sizes if x <= MAX))
