@@ -39,19 +39,19 @@ use Symfony\Component\Console\Output\OutputInterface;\n\n\
 #[AsCommand(name: 'aoc:$(DAY)')]\n\
 class Day$(DAY) extends AocCommand\n\
 {\n\
-    /** @param Vector \$$input */\n\
+    /** @param Vector<string> \$$input */\n\
     protected function partOne(Vector \$$input, OutputInterface \$$output): void\n\
     {\n\
     }\n\n\
-    /** @param Vector \$$input */\n\
+    /** @param Vector<string> \$$input */\n\
     protected function partTwo(Vector \$$input, OutputInterface \$$output): void\n\
     {\n\
     }\n\
-}" > src/Command/Day$(DAY).php
+}" >> src/Command/Day$(DAY).php
 	@echo "<?php\n\n\
 declare(strict_types=1);\n\
 namespace App\Tests\Unit;\n\n\
 class Day$(DAY)Test extends AocBase\n\
 {\n\
    protected const DAY = $(DAY);\n\
-}" > tests/Unit/Day$(DAY)Test.php
+}" >> tests/Unit/Day$(DAY)Test.php
