@@ -25,9 +25,9 @@ shell: ## Open an interactive shell
 
 .PHONY: prep_day
 prep_day:
-	ifndef DAY
+ifndef DAY
 	$(error DAY is not set)
-	endif
+endif
 	mkdir input/$(DAY)
 	touch input/$(DAY)/example.input input/$(DAY)/input input/$(DAY)/one.output input/$(DAY)/two.output
 	@echo "<?php\n\n\
