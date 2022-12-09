@@ -14,6 +14,7 @@ use function array_key_exists;
 use function array_map;
 use function array_sum;
 use function explode;
+use function range;
 
 #[AsCommand(name: 'aoc:9')]
 class Day9 extends AocCommand
@@ -59,27 +60,27 @@ class Day9 extends AocCommand
         }
     }
 
-    /** @param Vector<string> $input */
-    protected function partOne(Vector $input, OutputInterface $output): void
+    private static function partX(Vector $input, OutputInterface $output, int $knots): void
     {
         $grid = [];
-        $head = [0, 0];
-        $tail = [0, 0];
+        $rope = array_map(static fn () => [0, 0], range(1, $knots));
 
         foreach ($input as $line) {
             [$direction, $steps] = explode(' ', $line);
 
             for ($i = 0; $i < (int) $steps; $i++) {
-                self::moveHead($head, $direction);
+                self::moveHead($rope[0], $direction);
 
-                self::moveKnotToHeadIfNeeded($head, $tail);
-
-                // Save tail pos in grid
-                if (! array_key_exists($tail[0], $grid)) {
-                    $grid[$tail[0]] = [];
+                for ($j = 0; $j < $knots - 1; $j++) {
+                    self::moveKnotToHeadIfNeeded($rope[$j], $rope[$j + 1]);
                 }
 
-                $grid[$tail[0]][$tail[1]] = 1;
+                // Save tail pos in grid
+                if (! array_key_exists($rope[$knots - 1][0], $grid)) {
+                    $grid[$rope[$knots - 1][0]] = [];
+                }
+
+                $grid[$rope[$knots - 1][0]][$rope[$knots - 1][1]] = 1;
             }
         }
 
@@ -89,32 +90,14 @@ class Day9 extends AocCommand
     }
 
     /** @param Vector<string> $input */
+    protected function partOne(Vector $input, OutputInterface $output): void
+    {
+        self::partX($input, $output, 2);
+    }
+
+    /** @param Vector<string> $input */
     protected function partTwo(Vector $input, OutputInterface $output): void
     {
-        $grid = [];
-        $rope = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]];
-
-        foreach ($input as $line) {
-            [$direction, $steps] = explode(' ', $line);
-
-            for ($i = 0; $i < (int) $steps; $i++) {
-                self::moveHead($rope[0], $direction);
-
-                for ($j = 0; $j < 9; $j++) {
-                    self::moveKnotToHeadIfNeeded($rope[$j], $rope[$j + 1]);
-                }
-
-                // Save tail pos in grid
-                if (! array_key_exists($rope[9][0], $grid)) {
-                    $grid[$rope[9][0]] = [];
-                }
-
-                $grid[$rope[9][0]][$rope[9][1]] = 1;
-            }
-        }
-
-        $total = array_sum(array_map('array_sum', $grid));
-
-        $output->writeln((string) $total);
+        self::partX($input, $output, 10);
     }
 }
