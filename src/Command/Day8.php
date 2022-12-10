@@ -18,9 +18,9 @@ use function str_split;
 #[AsCommand(name: 'aoc:8')]
 class Day8 extends AocCommand
 {
-    /** @var array<int[]>  */
+    /** @var array<int[]> */
     private array $grid;
-    /** @var array<int[]>  */
+    /** @var array<int[]> */
     private array $gridTransposed;
 
     /** @return array<int[]> */
@@ -29,7 +29,7 @@ class Day8 extends AocCommand
         $grid = [];
 
         foreach ($input as $line) {
-            $grid[] = array_map(static fn ($x) => (int) $x, str_split($line));
+            $grid[] = array_map(static fn($x) => (int)$x, str_split($line));
         }
 
         return $grid;
@@ -70,14 +70,14 @@ class Day8 extends AocCommand
     /** @param Vector<string> $input */
     protected function partOne(Vector $input, OutputInterface $output): void
     {
-        $this->grid           = self::readGrid($input);
+        $this->grid = self::readGrid($input);
         $this->gridTransposed = self::transpose($this->grid);
 
         $total = 0;
 
         for ($i = 1; $i < count($this->grid) - 1; $i++) {
             for ($j = 1; $j < count($this->gridTransposed) - 1; $j++) {
-                if (! $this->checkVisibility($i, $j)) {
+                if (!$this->checkVisibility($i, $j)) {
                     continue;
                 }
 
@@ -87,7 +87,7 @@ class Day8 extends AocCommand
 
         $total += count($this->grid) * 2 + count($this->gridTransposed) * 2 - 4;
 
-        $output->writeln((string) $total);
+        $output->writeln((string)$total);
     }
 
     private function calculateScenicScore(int $i, int $j): int
@@ -119,8 +119,8 @@ class Day8 extends AocCommand
     /** @param Vector<string> $input */
     protected function partTwo(Vector $input, OutputInterface $output): void
     {
-        if (! isset($this->grid)) {
-            $this->grid           = self::readGrid($input);
+        if (!isset($this->grid)) {
+            $this->grid = self::readGrid($input);
             $this->gridTransposed = self::transpose($this->grid);
         }
 
@@ -132,6 +132,6 @@ class Day8 extends AocCommand
             }
         }
 
-        $output->writeln((string) $best);
+        $output->writeln((string)$best);
     }
 }
