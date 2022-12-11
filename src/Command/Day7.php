@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use Ds\Stack;
 use Ds\Vector;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -12,6 +11,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'aoc:7')]
 class Day7 extends AocCommand
 {
+    /**
+     * @param Vector<string> $input
+     * @return array<string, mixed>
+     */
     private static function readTree(Vector $input): array
     {
         $root = [];
@@ -22,7 +25,6 @@ class Day7 extends AocCommand
             if ($command === '$ cd /') {
                 $stack = [];
                 $current = &$root;
-
             } elseif ($command === '$ cd ..') {
                 if (count($stack) === 0) {
                     $current = &$root;
@@ -30,36 +32,31 @@ class Day7 extends AocCommand
                 }
 
                 $current = array_pop($stack);
-
             } elseif (str_starts_with($command, '$ cd')) {
                 preg_match('/\$ cd (?<name>[a-z]+)/', $command, $matches);
                 $stack[] = &$current[$matches['name']];
                 $current = &$current[$matches['name']];
-
             } elseif (str_starts_with($command, 'dir')) {
                 preg_match('/dir (?<name>[a-z]+)/', $command, $matches);
                 $current[$matches['name']] = [];
-
             } elseif ($command === '$ ls') {
                 continue;
-
             } else {
                 preg_match('/(?<size>\d+) (?<name>[a-z.]+)/', $command, $matches);
-                $current[$matches['name']] = (int) $matches['size'];
-
+                $current[$matches['name']] = (int)$matches['size'];
             }
         }
 
         return $root;
     }
 
-    /** @param Vector $input */
+    /** @param Vector<string> $input */
     protected function partOne(Vector $input, OutputInterface $output): void
     {
         $tree = self::readTree($input);
     }
 
-    /** @param Vector $input */
+    /** @param Vector<string> $input */
     protected function partTwo(Vector $input, OutputInterface $output): void
     {
     }

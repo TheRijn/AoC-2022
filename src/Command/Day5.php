@@ -21,7 +21,9 @@ class Day5 extends AocCommand
 
     private int $stackLines = 3;
 
-    /** @return Vector<Stack<string>> */
+    /** @param Vector<string> $input
+     * @return Vector<Stack<string>>
+     */
     private function readStacks(Vector $input): Vector
     {
         if ($input->count() > 10) {
@@ -50,17 +52,17 @@ class Day5 extends AocCommand
         return $stacks;
     }
 
-    /** @param Vector $input */
+    /** @param Vector<string> $input */
     protected function partOne(Vector $input, OutputInterface $output): void
     {
-        $stacks      = $this->readStacks($input);
+        $stacks = $this->readStacks($input);
 
         foreach ($input->slice($this->stackLines + 2) as $line) {
             preg_match(self::RE2, $line, $matches);
 
-            $amount = (int) $matches['amount'];
-            $from   = (int) $matches['from'] - 1;
-            $to     = (int) $matches['to'] - 1;
+            $amount = (int)$matches['amount'];
+            $from = (int)$matches['from'] - 1;
+            $to = (int)$matches['to'] - 1;
 
             for ($i = 0; $i < $amount; $i++) {
                 $stacks[$to][] = $stacks[$from]->pop();
@@ -75,17 +77,17 @@ class Day5 extends AocCommand
         $output->writeln('');
     }
 
-    /** @param Vector $input */
+    /** @param Vector<string> $input */
     protected function partTwo(Vector $input, OutputInterface $output): void
     {
-        $stacks      = $this->readStacks($input);
+        $stacks = $this->readStacks($input);
 
         foreach ($input->slice($this->stackLines + 2) as $line) {
             preg_match(self::RE2, $line, $matches);
 
-            $amount = (int) $matches['amount'];
-            $from   = (int) $matches['from'] - 1;
-            $to     = (int) $matches['to'] - 1;
+            $amount = (int)$matches['amount'];
+            $from = (int)$matches['from'] - 1;
+            $to = (int)$matches['to'] - 1;
 
             $temp = new Stack();
 

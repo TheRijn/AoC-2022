@@ -60,15 +60,16 @@ class Day9 extends AocCommand
         }
     }
 
+    /** @param Vector<string> $input */
     private static function partX(Vector $input, OutputInterface $output, int $knots): void
     {
         $grid = [];
-        $rope = array_map(static fn () => [0, 0], range(1, $knots));
+        $rope = array_map(static fn() => [0, 0], range(1, $knots));
 
         foreach ($input as $line) {
             [$direction, $steps] = explode(' ', $line);
 
-            for ($i = 0; $i < (int) $steps; $i++) {
+            for ($i = 0; $i < (int)$steps; $i++) {
                 self::moveHead($rope[0], $direction);
 
                 for ($j = 0; $j < $knots - 1; $j++) {
@@ -76,7 +77,7 @@ class Day9 extends AocCommand
                 }
 
                 // Save tail pos in grid
-                if (! array_key_exists($rope[$knots - 1][0], $grid)) {
+                if (!array_key_exists($rope[$knots - 1][0], $grid)) {
                     $grid[$rope[$knots - 1][0]] = [];
                 }
 
@@ -86,7 +87,7 @@ class Day9 extends AocCommand
 
         $total = array_sum(array_map('array_sum', $grid));
 
-        $output->writeln((string) $total);
+        $output->writeln((string)$total);
     }
 
     /** @param Vector<string> $input */

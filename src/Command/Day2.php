@@ -13,14 +13,14 @@ use function sprintf;
 #[AsCommand(name: 'aoc:2')]
 class Day2 extends AocCommand
 {
-    private const ROCK     = 1;
-    private const PAPER    = 2;
+    private const ROCK = 1;
+    private const PAPER = 2;
     private const SCISSORS = 3;
 
     private const TIE = 3;
     private const WIN = 6;
 
-    /** @param Vector $input */
+    /** @param Vector<string> $input */
     protected function partOne(Vector $input, OutputInterface $output): void
     {
         $total = 0;
@@ -53,17 +53,17 @@ class Day2 extends AocCommand
             }
         }
 
-        $output->writeln((string) ($total));
+        $output->writeln((string)($total));
     }
 
-    /** @param Vector $input */
+    /** @param Vector<string> $input */
     protected function partTwo(Vector $input, OutputInterface $output): void
     {
         $total = 0;
 
         foreach ($input as $line) {
             $shouldWin = $line[2];
-            $other     = $line[0];
+            $other = $line[0];
 
             if ($shouldWin === 'X') { // Lose
                 if ($other === 'A') {
@@ -94,6 +94,6 @@ class Day2 extends AocCommand
             }
         }
 
-        $output->writeln((string) ($total));
+        $output->writeln((string)($total));
     }
 }

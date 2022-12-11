@@ -81,6 +81,7 @@ class Day10 extends AocCommand
         }
     }
 
+    /** @param Vector<string> $input */
     protected function newInstruction(
         Vector $input,
     ): void {

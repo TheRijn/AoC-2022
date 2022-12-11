@@ -1,0 +1,51 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Cannot access an offset on Ds\\\\Vector\\<\\*NEVER\\*\\>\\.$#"
+			count: 3
+			path: src/Command/Day1.php
+
+		-
+			message: "#^Cannot access offset int on Ds\\\\Vector\\<string\\>\\.$#"
+			count: 1
+			path: src/Command/Day10.php
+
+		-
+			message: "#^Cannot access offset 0 on Ds\\\\Set\\<string\\>\\.$#"
+			count: 1
+			path: src/Command/Day3.php
+
+		-
+			message: "#^Cannot access offset 0 on Ds\\\\Vector\\<Ds\\\\Set\\<string\\>\\>\\.$#"
+			count: 1
+			path: src/Command/Day3.php
+
+		-
+			message: "#^Cannot access offset 1 on Ds\\\\Vector\\<Ds\\\\Set\\<string\\>\\>\\.$#"
+			count: 1
+			path: src/Command/Day3.php
+
+		-
+			message: "#^Cannot access offset 2 on Ds\\\\Vector\\<Ds\\\\Set\\<string\\>\\>\\.$#"
+			count: 1
+			path: src/Command/Day3.php
+
+		-
+			message: "#^Cannot access an offset on Ds\\\\Stack\\<\\*NEVER\\*\\>\\.$#"
+			count: 1
+			path: src/Command/Day5.php
+
+		-
+			message: "#^Cannot access an offset on Ds\\\\Vector\\<\\*NEVER\\*\\>\\.$#"
+			count: 1
+			path: src/Command/Day5.php
+
+		-
+			message: "#^Cannot access offset int on Ds\\\\Vector\\<Ds\\\\Stack\\<string\\>\\>\\.$#"
+			count: 2
+			path: src/Command/Day5.php
+
+		-
+			message: "#^Cannot access offset 0 on Ds\\\\Vector\\<string\\>\\.$#"
+			count: 2
+			path: src/Command/Day6.php

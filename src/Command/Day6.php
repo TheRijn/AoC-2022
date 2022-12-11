@@ -15,6 +15,9 @@ use function str_split;
 #[AsCommand(name: 'aoc:6')]
 class Day6 extends AocCommand
 {
+    /**
+     * @param Vector<string> $string
+     */
     private static function findUniquePart(Vector $string, int $length): int
     {
         for ($i = $length; $length <= $string->count(); $i++) {
@@ -26,19 +29,19 @@ class Day6 extends AocCommand
         throw new InvalidArgumentException();
     }
 
-    /** @param Vector $input */
+    /** @param Vector<string> $input */
     protected function partOne(Vector $input, OutputInterface $output): void
     {
         $inputChars = new Vector(str_split($input[0]));
 
-        $output->writeln((string) self::findUniquePart($inputChars, 4));
+        $output->writeln((string)self::findUniquePart($inputChars, 4));
     }
 
-    /** @param Vector $input */
+    /** @param Vector<string> $input */
     protected function partTwo(Vector $input, OutputInterface $output): void
     {
         $inputChars = new Vector(str_split($input[0]));
 
-        $output->writeln((string) self::findUniquePart($inputChars, 14));
+        $output->writeln((string)self::findUniquePart($inputChars, 14));
     }
 }

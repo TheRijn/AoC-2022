@@ -23,7 +23,11 @@ class Day8 extends AocCommand
     /** @var array<int[]> */
     private array $gridTransposed;
 
-    /** @return array<int[]> */
+    /**
+     * @param Vector<string> $input
+     *
+     * @return array<int[]>
+     */
     private static function readGrid(Vector $input): array
     {
         $grid = [];

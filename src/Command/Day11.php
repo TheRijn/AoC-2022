@@ -12,6 +12,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'aoc:11')]
 class Day11 extends AocCommand
 {
+    /**
+     * @param Vector<string> $input
+     *
+     * @return Vector<Monkey>
+     */
     private function makeMonkeys(Vector $input, bool $partOne): Vector
     {
         Monkey::$modFactor = 1;
@@ -27,27 +32,28 @@ class Day11 extends AocCommand
         return $monkeys;
     }
 
+    /** @param Vector<Monkey> $monkeys */
     private function doMonkeyBusiness(Vector $monkeys, int $rounds, OutputInterface $output): int
     {
         foreach (range(1, $rounds) as $round) {
             if ($output->isVerbose()) {
                 $output->writeln((string)$round);
             }
-            /** @var Monkey[] $monkeys */
+
             foreach ($monkeys as $monkey) {
                 while ($monkey->hasItems()) {
                     [$monkeyNo, $item] = $monkey->throwItem();
-                    $monkeys[$monkeyNo]->catchItem($item);
+                    $monkeys->get($monkeyNo)->catchItem($item);
                 }
             }
         }
 
-        /** @var Monkey $monkey */
         $inspectionCounts = $monkeys->map(static fn($monkey) => $monkey->getInspections())->sorted()->reversed();
 
-        return $inspectionCounts[0] * $inspectionCounts[1];
+        return $inspectionCounts->get(0) * $inspectionCounts->get(1);
     }
 
+    /** @param Vector<string> $input */
     protected function partOne(Vector $input, OutputInterface $output): void
     {
         $monkeys = $this->makeMonkeys($input, true);
@@ -55,6 +61,7 @@ class Day11 extends AocCommand
         $output->writeln((string)$this->doMonkeyBusiness($monkeys, 20, $output));
     }
 
+    /** @param Vector<string> $input */
     protected function partTwo(Vector $input, OutputInterface $output): void
     {
         $monkeys = $this->makeMonkeys($input, false);

@@ -17,9 +17,11 @@
     "symfony/yaml": "6.2.*"
   },
   "require-dev": {
-    "roave/security-advisories": "dev-latest",
     "doctrine/coding-standard": "^10.0",
+    "phpstan/phpstan": "^1.9",
+    "phpstan/phpstan-symfony": "^1.2",
     "phpunit/phpunit": "^9",
+    "roave/security-advisories": "dev-latest",
     "symfony/phpunit-bridge": "6.2.*"
   },
   "config": {

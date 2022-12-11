@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use Ds\Vector;
+use InvalidArgumentException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -36,7 +37,7 @@ abstract class AocCommand extends Command
             $this->partTwo($textInput, $output);
         }
 
-        if (! $input->getOption('one') && ! $input->getOption('two')) {
+        if (!$input->getOption('one') && !$input->getOption('two')) {
             $this->partOne($textInput, $output);
             $this->partTwo($textInput, $output);
         }
@@ -46,18 +47,25 @@ abstract class AocCommand extends Command
 
     /**
      * https://github.com/symfony/symfony/issues/37835
+     * @return Vector<string>
      */
     private function getInputFromStdIn(InputInterface $input): Vector
     {
-        $inputStream   = $input instanceof StreamableInputInterface ? $input->getStream() : null;
+        $inputStream = $input instanceof StreamableInputInterface ? $input->getStream() : null;
         $inputStream ??= STDIN;
 
-        return new Vector(explode("\n", rtrim(stream_get_contents($inputStream))));
+        $contents = stream_get_contents($inputStream);
+
+        if ($contents === false) {
+            throw new InvalidArgumentException();
+        }
+
+        return new Vector(explode("\n", rtrim($contents)));
     }
 
-    /** @param Vector $input */
+    /** @param Vector<string> $input */
     abstract protected function partOne(Vector $input, OutputInterface $output): void;
 
-    /** @param Vector $input */
+    /** @param Vector<string> $input */
     abstract protected function partTwo(Vector $input, OutputInterface $output): void;
 }

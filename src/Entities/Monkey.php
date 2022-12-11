@@ -12,6 +12,7 @@ final class Monkey
     public static bool $partOne = true;
 
 
+    /** @param Queue<int> $items */
     public function __construct(
         public Queue $items,
         public string $operation,
@@ -21,16 +22,17 @@ final class Monkey
     ) {
     }
 
+    /** @param Vector<string> $text */
     public static function createFromText(Vector $text): self
     {
         $startingItems = new Queue(
-            array_map(static fn($in) => (int)$in, explode(', ', explode(': ', $text[1])[1]))
+            array_map(static fn($in) => (int)$in, explode(', ', explode(': ', $text->get(1))[1]))
         );
 
-        $operation = str_replace(['new', 'old'], ["\$new", "\$old"], explode(': ', $text[2])[1]) . ';';
-        $test = (int)explode(' ', $text[3])[5];
-        $ifTrue = (int)(explode(' ', $text[4])[9]);
-        $ifFalse = (int)(explode(' ', $text[5])[9]);
+        $operation = str_replace(['new', 'old'], ["\$new", "\$old"], explode(': ', $text->get(2))[1]) . ';';
+        $test = (int)explode(' ', $text->get(3))[5];
+        $ifTrue = (int)(explode(' ', $text->get(4))[9]);
+        $ifFalse = (int)(explode(' ', $text->get(5))[9]);
 
         self::$modFactor *= $test;
 
