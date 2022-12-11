@@ -12,7 +12,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'aoc:11')]
 class Day11 extends AocCommand
 {
-    /** @return Vector<Monkey> */
     private function makeMonkeys(Vector $input, bool $partOne): Vector
     {
         Monkey::$modFactor = 1;
@@ -49,7 +48,6 @@ class Day11 extends AocCommand
         return $inspectionCounts[0] * $inspectionCounts[1];
     }
 
-    /** @param Vector<string> $input */
     protected function partOne(Vector $input, OutputInterface $output): void
     {
         $monkeys = $this->makeMonkeys($input, true);
@@ -57,7 +55,6 @@ class Day11 extends AocCommand
         $output->writeln((string)$this->doMonkeyBusiness($monkeys, 20, $output));
     }
 
-    /** @param Vector<string> $input */
     protected function partTwo(Vector $input, OutputInterface $output): void
     {
         $monkeys = $this->makeMonkeys($input, false);

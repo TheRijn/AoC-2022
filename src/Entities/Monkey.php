@@ -15,9 +15,9 @@ final class Monkey
     public function __construct(
         public Queue $items,
         public string $operation,
-        private int $test,
-        private int $ifTrue,
-        private int $ifFalse,
+        private readonly int $test,
+        private readonly int $ifTrue,
+        private readonly int $ifFalse,
     ) {
     }
 
@@ -68,7 +68,7 @@ final class Monkey
         $this->items->push($item);
     }
 
-    private function inspectAndGetBored(int &$old)
+    private function inspectAndGetBored(int &$old): void
     {
         $this->inspections++;
         $new = 0;
