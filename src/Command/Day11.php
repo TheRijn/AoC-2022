@@ -13,8 +13,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Day11 extends AocCommand
 {
     /** @return Vector<Monkey> */
-    private function makeMonkeys(Vector $input, bool $partOne): Vector
+    private function makeMonkeys(Vector $input, bool $partOne) : Vector
     {
+        Monkey::$modFactor = 1;
+
         $monkeys = new Vector();
 
         while ($monkeys->count() < $input->count() / 7) {
@@ -26,7 +28,7 @@ class Day11 extends AocCommand
     }
 
     /** @param Vector<string> $input */
-    protected function partOne(Vector $input, OutputInterface $output): void
+    protected function partOne(Vector $input, OutputInterface $output) : void
     {
         $monkeys = $this->makeMonkeys($input, true);
 
@@ -52,7 +54,7 @@ class Day11 extends AocCommand
     }
 
     /** @param Vector<string> $input */
-    protected function partTwo(Vector $input, OutputInterface $output): void
+    protected function partTwo(Vector $input, OutputInterface $output) : void
     {
         $monkeys = $this->makeMonkeys($input, false);
 
