@@ -9,6 +9,7 @@ final class Monkey
 {
     public static int $modFactor = 1;
     private int $inspections = 0;
+    public static bool $partOne = true;
 
 
     public function __construct(
@@ -17,11 +18,10 @@ final class Monkey
         private int $test,
         private int $ifTrue,
         private int $ifFalse,
-        private bool $partOne,
     ) {
     }
 
-    public static function createFromText(Vector $text, bool $partOne): self
+    public static function createFromText(Vector $text): self
     {
         $startingItems = new Queue(
             array_map(static fn($in) => (int)$in, explode(', ', explode(': ', $text[1])[1]))
@@ -40,7 +40,6 @@ final class Monkey
             $test,
             $ifTrue,
             $ifFalse,
-            $partOne,
         );
     }
 
@@ -74,7 +73,7 @@ final class Monkey
         $this->inspections++;
         $new = 0;
         eval($this->operation);
-        $old = $this->partOne ? intdiv($new, 3) : ($new % self::$modFactor);
+        $old = self::$partOne ? intdiv($new, 3) : ($new % self::$modFactor);
     }
 
     public function getInspections(): int
