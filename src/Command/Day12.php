@@ -15,10 +15,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class Day12 extends AocCommand
 {
-    /** @var array<int[]> */
-    private array $grid = [];
-    /** @var array<int[]> */
-    private array $distances = [];
+    /** @var array<int, array<int,int> $grid */
+    private array $grid;
+    /** @var array<int, array<int,int> $distances */
+    private array $distances;
 
     /** @phpstan-var Position */
     private $start;
@@ -33,8 +33,10 @@ class Day12 extends AocCommand
     private int $width;
 
     /** @param Vector<string> $input */
-    private function readAndDoTheDijkstra(Vector $input): int
+    private function readGrid(Vector $input)
     {
+        $this->grid = [];
+
         // Read grid
         foreach ($input as $y => $line) {
             $row = [];
@@ -56,6 +58,11 @@ class Day12 extends AocCommand
 
         $this->height = count($this->grid);
         $this->width = count($this->grid[0]);
+    }
+
+    private function doTheDijkstra(): int
+    {
+        $this->distances = [];
 
         // Set distances to inf
         foreach ($this->grid as $row) {
@@ -64,9 +71,8 @@ class Day12 extends AocCommand
 
         $this->queue = new PriorityQueue();
 
-
-        $this->queue->push([0, $this->start], 0);
-        $this->setDistance($this->start, 0);
+        $this->queue->push([0, $this->end], 0);
+        $this->setDistance($this->end, 0);
 
         while (!$this->queue->isEmpty()) {
             [$distU, $u] = $this->queue->pop();
@@ -83,7 +89,7 @@ class Day12 extends AocCommand
             }
         }
 
-        return $this->getDistance($this->end);
+        return $this->getDistance($this->start);
     }
 
     /** @phpstan-param Position $position */
@@ -117,7 +123,7 @@ class Day12 extends AocCommand
      *
      * @phpstan-return Position[]
      */
-    public function getNeighbors($position): array
+    private function getNeighbors($position): array
     {
         $neighbors = [];
 
@@ -132,6 +138,7 @@ class Day12 extends AocCommand
                 ) {
                     continue;
                 }
+
                 $possibleNeighbors[] = [$y, $x];
             }
         }
@@ -139,8 +146,9 @@ class Day12 extends AocCommand
         $height = $this->getHeight($position);
 
         foreach ($possibleNeighbors as $neighbor) {
-            $newHeight = $this->getHeight($neighbor);
-            if ($newHeight <= $height + 1) {
+            $neighborHeight = $this->getHeight($neighbor);
+
+            if ($neighborHeight + 1 >= $height) {
                 $neighbors[] = $neighbor;
             }
         }
@@ -148,15 +156,33 @@ class Day12 extends AocCommand
         return $neighbors;
     }
 
-
     /** @param Vector<string> $input */
     protected function partOne(Vector $input, OutputInterface $output): void
     {
-        $output->writeln((string)$this->readAndDoTheDijkstra($input));
+        $this->readGrid($input);
+
+        $this->doTheDijkstra();
+        $output->writeln((string)$this->getDistance($this->start));
     }
 
     /** @param Vector<string> $input */
     protected function partTwo(Vector $input, OutputInterface $output): void
     {
+        $shortest = PHP_INT_MAX;
+
+        $this->readGrid($input);
+        $this->doTheDijkstra();
+
+        foreach ($this->distances as $y => $row) {
+            foreach ($row as $x => $cell) {
+                if ($this->getHeight([$y, $x]) !== 0) {
+                    continue;
+                }
+
+                $shortest = min($this->getDistance([$y, $x]), $shortest);
+            }
+        }
+
+        $output->writeln((string)$shortest);
     }
 }
