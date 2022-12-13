@@ -15,17 +15,13 @@ class Day13 extends AocCommand
     /**
      * @param mixed[]|int $left
      * @param mixed[]|int $right
-     * @return bool|null
+     * @return int
      */
-    private static function compairs(array|int $left, array|int $right): ?bool
+    private static function compairs(array|int $left, array|int $right): int
     {
         // Both integers
         if (is_int($left) && is_int($right)) {
-            if ($left === $right) {
-                return null;
-            }
-
-            return $left < $right;
+            return $left <=> $right;
         }
 
         // Both lists
@@ -33,18 +29,12 @@ class Day13 extends AocCommand
             $smallestCount = min(count($left), count($right));
 
             for ($i = 0; $i < $smallestCount; $i++) {
-                $result = self::compairs($left[$i], $right[$i]);
-
-                if ($result !== null) {
+                if (0 !== $result = self::compairs($left[$i], $right[$i])) {
                     return $result;
                 }
             }
 
-            if (count($left) === count($right)) {
-                return null;
-            }
-
-            return count($left) < count($right);
+            return count($left) <=> count($right);
         }
 
         // Exactly one integer
@@ -66,9 +56,8 @@ class Day13 extends AocCommand
         }
 
         $rightPackages = [];
-
         foreach ($pairs as $index => [$left, $right]) {
-            if (self::compairs($left, $right) === true) {
+            if (self::compairs($left, $right) === -1) {
                 $rightPackages[] = $index + 1;
             }
         }
@@ -89,7 +78,7 @@ class Day13 extends AocCommand
             $packets[] = \Safe\json_decode($input->get($i + 1));
         }
 
-        usort($packets, static fn($a, $b) => self::compairs($a, $b) ? -1 : 1);
+        usort($packets, 'self::compairs');
 
         $output->writeln(
             (string)(
