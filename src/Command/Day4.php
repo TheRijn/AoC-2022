@@ -19,7 +19,7 @@ class Day4 extends AocCommand
         $count = 0;
 
         foreach ($input as $line) {
-            preg_match(self::RE, $line, $matches);
+            \Safe\preg_match(self::RE, $line, $matches);
             $numbers = array_map(fn($x) => (int)$x, array_slice($matches, 1, 4));
 
             if (
@@ -39,7 +39,7 @@ class Day4 extends AocCommand
         $count = 0;
 
         foreach ($input as $line) {
-            preg_match(self::RE, $line, $matches);
+            \Safe\preg_match(self::RE, $line, $matches);
             $numbers = array_map(static fn($x) => (int)$x, array_slice($matches, 1, 4));
 
             if ((min($numbers[1], $numbers[3]) - max($numbers[0], $numbers[2]) + 1) >= 1) {

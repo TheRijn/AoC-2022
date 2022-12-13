@@ -13,7 +13,6 @@ use Symfony\Component\Console\Input\StreamableInputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function explode;
-use function stream_get_contents;
 
 use const STDIN;
 
@@ -54,11 +53,7 @@ abstract class AocCommand extends Command
         $inputStream = $input instanceof StreamableInputInterface ? $input->getStream() : null;
         $inputStream ??= STDIN;
 
-        $contents = stream_get_contents($inputStream);
-
-        if ($contents === false) {
-            throw new InvalidArgumentException();
-        }
+        $contents = \Safe\stream_get_contents($inputStream);
 
         return new Vector(explode("\n", rtrim($contents)));
     }

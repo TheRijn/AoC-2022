@@ -33,16 +33,16 @@ class Day7 extends AocCommand
 
                 $current = array_pop($stack);
             } elseif (str_starts_with($command, '$ cd')) {
-                preg_match('/\$ cd (?<name>[a-z]+)/', $command, $matches);
+                \Safe\preg_match('/\$ cd (?<name>[a-z]+)/', $command, $matches);
                 $stack[] = &$current[$matches['name']];
                 $current = &$current[$matches['name']];
             } elseif (str_starts_with($command, 'dir')) {
-                preg_match('/dir (?<name>[a-z]+)/', $command, $matches);
+                \Safe\preg_match('/dir (?<name>[a-z]+)/', $command, $matches);
                 $current[$matches['name']] = [];
             } elseif ($command === '$ ls') {
                 continue;
             } else {
-                preg_match('/(?<size>\d+) (?<name>[a-z.]+)/', $command, $matches);
+                \Safe\preg_match('/(?<size>\d+) (?<name>[a-z.]+)/', $command, $matches);
                 $current[$matches['name']] = (int)$matches['size'];
             }
         }

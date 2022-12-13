@@ -8,8 +8,6 @@ use Ds\Vector;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use function sprintf;
-
 #[AsCommand(name: 'aoc:2')]
 class Day2 extends AocCommand
 {

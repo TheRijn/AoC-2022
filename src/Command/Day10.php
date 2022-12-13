@@ -11,7 +11,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use function abs;
 use function array_map;
-use function preg_match;
 use function range;
 
 #[AsCommand(name: 'aoc:10')]
@@ -97,7 +96,7 @@ class Day10 extends AocCommand
             $this->instruction = 0;
             $this->cyclesLeftInCurrentInstruction = 1;
         } else {
-            preg_match('/addx (?<number>-?\d+)/', $newInstruction, $matches);
+            \Safe\preg_match('/addx (?<number>-?\d+)/', $newInstruction, $matches);
             $this->instruction = (int)$matches['number'];
             $this->cyclesLeftInCurrentInstruction = 2;
         }

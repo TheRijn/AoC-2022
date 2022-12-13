@@ -9,14 +9,12 @@ use Ds\Vector;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use function preg_match;
-use function preg_match_all;
 use function str_split;
 
 #[AsCommand(name: 'aoc:5')]
 class Day5 extends AocCommand
 {
-    private const RE1 = '/((?P<letter>\[[A-Z]\]|   )(?> |$))+/U';
+    private const RE1 = '/((?P<letter>\[[A-Z]]| {3})(?> |$))+/U';
     private const RE2 = '/move (?P<amount>\d+) from (?P<from>\d+) to (?P<to>\d+)/';
 
     private int $stackLines = 3;
@@ -33,7 +31,7 @@ class Day5 extends AocCommand
         $stacks = new Vector();
 
         foreach ($input->slice(0, $this->stackLines)->reversed() as $line) {
-            preg_match_all(self::RE1, $line, $matches);
+            \Safe\preg_match_all(self::RE1, $line, $matches);
             $letters = $matches['letter'];
 
             foreach ($letters as $key => $value) {
@@ -58,7 +56,7 @@ class Day5 extends AocCommand
         $stacks = $this->readStacks($input);
 
         foreach ($input->slice($this->stackLines + 2) as $line) {
-            preg_match(self::RE2, $line, $matches);
+            \Safe\preg_match(self::RE2, $line, $matches);
 
             $amount = (int)$matches['amount'];
             $from = (int)$matches['from'] - 1;
@@ -83,7 +81,7 @@ class Day5 extends AocCommand
         $stacks = $this->readStacks($input);
 
         foreach ($input->slice($this->stackLines + 2) as $line) {
-            preg_match(self::RE2, $line, $matches);
+            \Safe\preg_match(self::RE2, $line, $matches);
 
             $amount = (int)$matches['amount'];
             $from = (int)$matches['from'] - 1;
