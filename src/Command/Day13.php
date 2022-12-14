@@ -78,7 +78,7 @@ class Day13 extends AocCommand
             $packets[] = \Safe\json_decode($input->get($i + 1));
         }
 
-        usort($packets, 'self::compairs');
+        usort($packets, self::compairs(...));
 
         $output->writeln(
             (string)(
