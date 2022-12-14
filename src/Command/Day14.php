@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use Ds\Vector;
+use Safe\Exceptions\PcreException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -17,11 +18,34 @@ class Day14 extends AocCommand
     private const ROCK = 1;
     private const SAND = 2;
 
-
+    /** @var int[][] */
     private array $cave = [];
     private int $highestY;
 
-    /** @return array<array{int, int}> */
+    /** @param Vector<string> $input
+     * @throws PcreException
+     */
+    protected function partOne(Vector $input, OutputInterface $output): void
+    {
+        $this->readCave($input);
+        $this->highestY = max(array_keys($this->cave));
+        $output->writeln((string)$this->runSimulationWithABottomlessPit());
+    }
+
+    /** @param Vector<string> $input
+     * @throws PcreException
+     */
+    private function readCave(Vector $input): void
+    {
+        foreach ($input as $pathString) {
+            $path = self::stringToPath($pathString);
+            $this->drawPath($path);
+        }
+    }
+
+    /** @return array<array{int, int}>
+     * @throws PcreException
+     */
     private static function stringToPath(string $pathString): array
     {
         \Safe\preg_match_all("/(?<x>\d+),(?<y>\d+)/", $pathString, $matches, PREG_SET_ORDER);
@@ -35,16 +59,18 @@ class Day14 extends AocCommand
         return $path;
     }
 
-    /** @param $position array{int, int} */
-    private function placePoint(array $position, int $type)
+    /** @param array<array{int, int}> $path */
+    private function drawPath(array $path): void
     {
-        [$x, $y] = $position;
-        if (!array_key_exists($y, $this->cave)) {
-            $this->cave[$y] = [];
+        for ($i = 0; $i < count($path) - 1; $i++) {
+            $this->drawPathPart($path[$i], $path[$i + 1]);
         }
-        $this->cave[$y][$x] = $type;
     }
 
+    /**
+     * @param array{int, int} $from
+     * @param array{int, int} $to
+     */
     private function drawPathPart(array $from, array $to): void
     {
         $xRange = range($from[0], $to[0]);
@@ -64,33 +90,15 @@ class Day14 extends AocCommand
         }
     }
 
-    /** @param $position array{int, int} */
-    private function getPosition(array $position): int
+    /** @param array{int, int} $position */
+    private function placePoint(array $position, int $type): void
     {
         [$x, $y] = $position;
-        if (array_key_exists($y, $this->cave) && array_key_exists($x, $this->cave[$y])) {
-            return $this->cave[$y][$x];
+        if (!array_key_exists($y, $this->cave)) {
+            $this->cave[$y] = [];
         }
-
-        return self::AIR;
+        $this->cave[$y][$x] = $type;
     }
-
-    private function drawPath(array $path): void
-    {
-        for ($i = 0; $i < count($path) - 1; $i++) {
-            $this->drawPathPart($path[$i], $path[$i + 1]);
-        }
-    }
-
-    /** @param Vector<string> $input */
-    private function readCave(Vector $input): void
-    {
-        foreach ($input as $pathString) {
-            $path = self::stringToPath($pathString);
-            $this->drawPath($path);
-        }
-    }
-
 
     private function runSimulationWithABottomlessPit(): int
     {
@@ -102,35 +110,9 @@ class Day14 extends AocCommand
             $this->placePoint($sandPos, self::SAND);
 
             while ($sandPos[1] < $this->highestY) {
-                // move down
-                if ($this->getPosition([$sandPos[0], $sandPos[1] + 1]) === self::AIR) {
-                    $this->placePoint($sandPos, self::AIR);
-                    $this->placePoint([$sandPos[0], $sandPos[1] + 1], self::SAND);
-
-                    $sandPos = [$sandPos[0], $sandPos[1] + 1];
-                    continue;
+                if (!$this->moveSand($sandPos)) {
+                    break;
                 }
-
-                // move left
-                if ($this->getPosition([$sandPos[0] - 1, $sandPos[1] + 1]) === self::AIR) {
-                    $this->placePoint($sandPos, self::AIR);
-                    $this->placePoint([$sandPos[0] - 1, $sandPos[1] + 1], self::SAND);
-
-                    $sandPos = [$sandPos[0] - 1, $sandPos[1] + 1];
-                    continue;
-                }
-
-                // move right
-                if ($this->getPosition([$sandPos[0] + 1, $sandPos[1] + 1]) === self::AIR) {
-                    $this->placePoint($sandPos, self::AIR);
-                    $this->placePoint([$sandPos[0] + 1, $sandPos[1] + 1], self::SAND);
-
-                    $sandPos = [$sandPos[0] + 1, $sandPos[1] + 1];
-                    continue;
-                }
-
-                // not possible
-                break;
             }
 
             if ($sandPos[1] >= $this->highestY) {
@@ -144,6 +126,61 @@ class Day14 extends AocCommand
         return $unitsOfSand;
     }
 
+    /** @param array{int, int} $sandPos */
+    private function moveSand(array &$sandPos): bool
+    {
+        // move down
+        if ($this->getPosition([$sandPos[0], $sandPos[1] + 1]) === self::AIR) {
+            $this->placePoint($sandPos, self::AIR);
+            $this->placePoint([$sandPos[0], $sandPos[1] + 1], self::SAND);
+
+            $sandPos = [$sandPos[0], $sandPos[1] + 1];
+            return true;
+        }
+
+        // move left
+        if ($this->getPosition([$sandPos[0] - 1, $sandPos[1] + 1]) === self::AIR) {
+            $this->placePoint($sandPos, self::AIR);
+            $this->placePoint([$sandPos[0] - 1, $sandPos[1] + 1], self::SAND);
+
+            $sandPos = [$sandPos[0] - 1, $sandPos[1] + 1];
+            return true;
+        }
+
+        // move right
+        if ($this->getPosition([$sandPos[0] + 1, $sandPos[1] + 1]) === self::AIR) {
+            $this->placePoint($sandPos, self::AIR);
+            $this->placePoint([$sandPos[0] + 1, $sandPos[1] + 1], self::SAND);
+
+            $sandPos = [$sandPos[0] + 1, $sandPos[1] + 1];
+            return true;
+        }
+
+        // not possible
+        return false;
+    }
+
+    /** @param array{int, int} $position */
+    private function getPosition(array $position): int
+    {
+        [$x, $y] = $position;
+        if (array_key_exists($y, $this->cave) && array_key_exists($x, $this->cave[$y])) {
+            return $this->cave[$y][$x];
+        }
+
+        return self::AIR;
+    }
+
+    /** @param Vector<string> $input
+     * @throws PcreException
+     */
+    protected function partTwo(Vector $input, OutputInterface $output): void
+    {
+        $this->readCave($input);
+        $this->highestY = max(array_keys($this->cave));
+        $output->writeln((string)$this->runSimulationWithAFloor());
+    }
+
     private function runSimulationWithAFloor(): int
     {
         $unitsOfSand = 0;
@@ -153,36 +190,10 @@ class Day14 extends AocCommand
 
             $this->placePoint($sandPos, self::SAND);
 
-            while ($sandPos[1] != $this->highestY + 1) {
-                // move down
-                if ($this->getPosition([$sandPos[0], $sandPos[1] + 1]) === self::AIR) {
-                    $this->placePoint($sandPos, self::AIR);
-                    $this->placePoint([$sandPos[0], $sandPos[1] + 1], self::SAND);
-
-                    $sandPos = [$sandPos[0], $sandPos[1] + 1];
-                    continue;
+            while ($sandPos[1] !== $this->highestY + 1) {
+                if (!$this->moveSand($sandPos)) {
+                    break;
                 }
-
-                // move left
-                if ($this->getPosition([$sandPos[0] - 1, $sandPos[1] + 1]) === self::AIR) {
-                    $this->placePoint($sandPos, self::AIR);
-                    $this->placePoint([$sandPos[0] - 1, $sandPos[1] + 1], self::SAND);
-
-                    $sandPos = [$sandPos[0] - 1, $sandPos[1] + 1];
-                    continue;
-                }
-
-                // move right
-                if ($this->getPosition([$sandPos[0] + 1, $sandPos[1] + 1]) === self::AIR) {
-                    $this->placePoint($sandPos, self::AIR);
-                    $this->placePoint([$sandPos[0] + 1, $sandPos[1] + 1], self::SAND);
-
-                    $sandPos = [$sandPos[0] + 1, $sandPos[1] + 1];
-                    continue;
-                }
-
-                // not possible
-                break;
             }
             $unitsOfSand++;
 
@@ -192,21 +203,5 @@ class Day14 extends AocCommand
         }
 
         return $unitsOfSand;
-    }
-
-    /** @param Vector<string> $input */
-    protected function partOne(Vector $input, OutputInterface $output): void
-    {
-        $this->readCave($input);
-        $this->highestY = max(array_keys($this->cave));
-        $output->writeln((string)$this->runSimulationWithABottomlessPit());
-    }
-
-    /** @param Vector<string> $input */
-    protected function partTwo(Vector $input, OutputInterface $output): void
-    {
-        $this->readCave($input);
-        $this->highestY = max(array_keys($this->cave));
-        $output->writeln((string)$this->runSimulationWithAFloor());
     }
 }
