@@ -94,7 +94,6 @@ class Day15 extends AocCommand
         return $line;
     }
 
-
     /**
      * @param array{int, int} $first
      * @param array{int, int} $second
@@ -113,10 +112,102 @@ class Day15 extends AocCommand
     {
         $this->readCoordinates($input);
 
-        $progressBar = new ProgressBar($output);
-        $progressBar->setFormat('very_verbose');
+        foreach ($this->sensors as [$sensor, $dist]) {
+            $result = $this->checkBoundaries($sensor, $dist);
+
+            if (null === $result) {
+                continue;
+            }
+
+            break;
+        }
+
+        $output->writeln((string)($result[0] * 4_000_000 + $result[1]));
+    }
 
 
-        $output->writeln((string)($x * 4_000_000 + $y));
+    /**
+     * Check the diamond clockwise, staring North
+     * @param array{array{int, int}, int} $sensor
+     * @param int $dist
+     * @return array{int, int}|null
+     */
+    private function checkBoundaries(array $sensor, int $dist): array|null
+    {
+        [$x, $y] = $sensor;
+        // NE
+        $y -= $dist + 1;
+        while ($y !== $sensor[1]) {
+            if ($x < 0 || $y < 0 || $x > $this->maxXY || $y > $this->maxXY) {
+                $x++;
+                $y++;
+                continue;
+            }
+
+            if (!$this->pointCollidesWithDiamond($x, $y)) {
+                return [$x, $y];
+            }
+
+            $x++;
+            $y++;
+        }
+        // SE
+        while ($x !== $sensor[0]) {
+            if ($x < 0 || $y < 0 || $x > $this->maxXY || $y > $this->maxXY) {
+                $x--;
+                $y++;
+                continue;
+            }
+
+            if (!$this->pointCollidesWithDiamond($x, $y)) {
+                return [$x, $y];
+            }
+
+            $x--;
+            $y++;
+        }
+        // SW
+        while ($y !== $sensor[1]) {
+            if ($x < 0 || $y < 0 || $x > $this->maxXY || $y > $this->maxXY) {
+                $x--;
+                $y--;
+                continue;
+            }
+
+            if (!$this->pointCollidesWithDiamond($x, $y)) {
+                return [$x, $y];
+            }
+
+            $x--;
+            $y--;
+        }
+        // NW
+        while ($x !== $sensor[0]) {
+            if ($x < 0 || $y < 0 || $x > $this->maxXY || $y > $this->maxXY) {
+                $x++;
+                $y--;
+                continue;
+            }
+
+            if (!$this->pointCollidesWithDiamond($x, $y)) {
+                return [$x, $y];
+            }
+
+            $x++;
+            $y--;
+        }
+
+        return null;
+    }
+
+    private function pointCollidesWithDiamond(int $x, int $y): bool
+    {
+        foreach ($this->sensors as [$sensor, $dist]) {
+            if (self::manhattanDist([$x, $y], $sensor) <= $dist) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
